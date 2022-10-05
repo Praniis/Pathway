@@ -1,0 +1,30 @@
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="jsp-base" namespace="/" extends="default">
+
+        <action name="">
+            <param name="location">/login</param>
+        </action>
+
+        <action name="login" class="io.pathway.app.user.action.UserAuthentication" method="login">
+            <result name="success">/pages/login.jsp</result>
+        </action>
+
+        <action name="logout" class="io.pathway.app.user.action.UserAuthentication" method="logout">
+            <result type="location">
+
+            </result>
+        </action>
+
+        <action name="register" class="io.pathway.app.user.action.UserAuthentication" method="register">
+            <result name="success">/pages/register.jsp</result>
+        </action>
+
+        <action name="home" class="io.pathway.app.user.action.UserAuthentication" method="home">
+            <result name="success">/pages/login.jsp</result>
+        </action>
+    </package>
+</struts>

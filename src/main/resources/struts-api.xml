@@ -1,0 +1,21 @@
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="api-auth" namespace="/api/auth" extends="struts-default">
+
+    </package>
+
+    <package name="api-user" namespace="/api/user" extends="default">
+
+    </package>
+
+    <package name="api-userrole" namespace="/api/userrole" extends="default">
+
+    </package>
+
+    <package name="api-organisation" namespace="/api/organisation" extends="default">
+
+    </package>
+</struts>
