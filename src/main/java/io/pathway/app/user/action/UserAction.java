@@ -4,15 +4,27 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import io.pathway.app.user.UserDAO;
 import io.pathway.models.User;
+import org.apache.struts2.ServletActionContext;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class UserAction extends ActionSupport {
 
-    User user = (User) UserDAO.getUserById((Long) ActionContext.getContext().getSession().get("userId"));
+    private User user = new User();
 
-    public UserAction() throws Exception {
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public String home() throws Exception {
+        Long userId = (Long) ActionContext.getContext().getSession().get("userId");
+        Long organisationId = (Long) ActionContext.getContext().getSession().get("organisationId");
+        user = (User) UserDAO.getUserById(userId, organisationId);
         return SUCCESS;
     }
 

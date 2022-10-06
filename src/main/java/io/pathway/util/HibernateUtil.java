@@ -1,12 +1,15 @@
 package io.pathway.util;
 
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+import java.util.Objects;
 
 public class HibernateUtil {
     private static HibernateUtil instance = null;
@@ -41,7 +44,11 @@ public class HibernateUtil {
     }
 
     public Session getSession() {
-        return getSessionFactory().openSession();
+        Session session = getSessionFactory().getCurrentSession();
+        if(Objects.isNull(session) || !session.isOpen()) {
+            session = getSessionFactory().withOptions().openSession();
+        }
+        return session;
     }
 
     public static HibernateUtil getInstance() {

@@ -1,7 +1,4 @@
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="io.pathway.models.User" %>
-
-<%! User loginUser = request.getAttribute(“loginUser”); %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,38 +13,9 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
     </head>
     <body class="sb-nav-fixed" style="font-size: .875rem;">
-        <aside>
-            <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark text-uppercase" style="font-family: 'Assistant', sans-serif;">
-                <a class="navbar-brand" href="/">PATHWAY</a>
-                <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle">
-                    <i class="fas fa-bars" aria-hidden="true"></i>
-                </button>
-                <!-- Navbar-->
-                <ul class="navbar-nav d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                            <!-- <a class="dropdown-item" href="/reset-password">Change Password</a> -->
-                            <a class="dropdown-item" href="/logout">Logout</a>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
+        <jsp:include page="common/topnav.jsp" />
         <div id="layoutSidenav">
-            <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
-                        <div class="nav"></div>
-                    </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as: </div>
-                        <c:out value="${loginUser.getName()}" />
-                    </div>
-                </nav>
-            </div>
+            <jsp:include page="common/sidenav.jsp" />
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid mt-3">
@@ -64,15 +32,15 @@
                                         <div class="p-2 mt-2 d-flex justify-content-between rounded stats">
                                             <div class="d-flex flex-column">
                                                 <span class="font-weight-bold">Name</span>
-                                                <span><c:out value="${loginUser.getName()}" /></span>
+                                                <span><c:out value="${user.getName()}" /></span>
                                             </div>
                                             <div class="d-flex flex-column">
                                                 <span class="font-weight-bold">Email</span>
-                                                <span><c:out value="${loginUser.getEmail()}" /></span>
+                                                <span><c:out value="${user.getEmail()}" /></span>
                                             </div>
                                             <div class="d-flex flex-column">
                                                 <span class="font-weight-bold">Mobile</span>
-                                                <span><c:out value="${loginUser.getMobile()}" /></span>
+                                                <span><c:out value="${user.getMobile()}" /></span>
                                             </div>
                                         </div>
                                     </div>

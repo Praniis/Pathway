@@ -65,13 +65,18 @@ public class UserDAO {
         }
     }
 
-    public static User getUserById(Long id) throws Exception {
+    public static User getUserById(Long userId, Long organisationId) throws Exception {
         Session session = HibernateUtil.getSessionFactory().openSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<User> query = builder.createQuery(User.class);
         Root<User> root = query.from(User.class);
-        query.select(root).where(builder.equal(root.get("id"), id));
-        return session.createQuery(query).uniqueResult();
+        query.select(root).where(builder.and(
+                builder.equal(root.get("id"), userId),
+                builder.equal(root.get("organisation"), organisationId)
+        ));
+        User user = session.createQuery(query).uniqueResult();
+        session.close();
+        return user;
     }
 
     public static User getUserByUserName(String username) throws Exception {
@@ -80,7 +85,9 @@ public class UserDAO {
         CriteriaQuery<User> query = builder.createQuery(User.class);
         Root<User> root = query.from(User.class);
         query.select(root).where(builder.equal(root.get("username"), username));
-        return session.createQuery(query).uniqueResult();
+        User user = session.createQuery(query).uniqueResult();
+        session.close();
+        return user;
     }
 
     public static List<User> getUserByOrganisationId(Long id) throws Exception {
@@ -89,6 +96,9 @@ public class UserDAO {
         CriteriaQuery<User> query = builder.createQuery(User.class);
         Root<User> root = query.from(User.class);
         query.select(root).where(builder.equal(root.get("organisation"), id));
-        return session.createQuery(query).list();
+        List<User> users = session.createQuery(query).list();
+        session.close();
+        return users;
+
     }
 }

@@ -20,4 +20,5 @@
         .ajaxStop(function() { Pace.restart(); })
         .ajaxError(function() { Pace.restart(); });
 
+    $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 })(jQuery);

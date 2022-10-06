@@ -1,6 +1,7 @@
 package io.pathway.app.user.action;
 
 import com.opensymphony.xwork2.ActionContext;
+import com.password4j.Password;
 import io.pathway.app.user.UserDAO;
 import io.pathway.app.user.UserService;
 import io.pathway.models.User;
@@ -43,6 +44,7 @@ public class UserAuthenticationAPI {
             User user = UserService.login(username, password);
             SessionMap session = (SessionMap) ActionContext.getContext().getSession();
             session.put("isLogin", true);
+            session.put("username", user.getUsername());
             session.put("userId", user.getId());
             session.put("organisationId", user.getOrganisation().getId());
             session.put("userRoleId", user.getUserRole().getId());
@@ -92,8 +94,36 @@ public class UserAuthenticationAPI {
             String newPassword = request.getParameter("newPassword");
             SessionMap session = (SessionMap) ActionContext.getContext().getSession();
             Long userId = (Long) session.get("userId");
-            User user = UserDAO.getUserById(userId);
+            Long organisationId = (Long) session.get("organisationId");
+            User user = UserDAO.getUserById(userId, organisationId);
             UserService.changePassword(user, oldPassword, newPassword);
+            result.put("success", true);
+            result.put("message", "Password changed successfully");
+        } catch (Exception e) {
+            result.put("success", false);
+            String errMsg = e.getMessage();
+            result.put("error", errMsg);
+        }
+        response.setContentType("application/json");
+        response.getWriter().write(result.toString());
+    }
+
+    public void processResetPassword() throws Exception {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        HttpServletResponse response = ServletActionContext.getResponse();
+        JSONObject result = new JSONObject();
+        try {
+            String password = request.getParameter("password");
+            String userId = request.getParameter("userId");
+            if (StringUtils.isEmpty(password) || StringUtils.isEmpty(userId)) {
+                throw new Exception("Input all required fields");
+            }
+            SessionMap session = (SessionMap) ActionContext.getContext().getSession();
+            Long organisationId = (Long) session.get("organisationId");
+            User user = UserDAO.getUserById(Long.valueOf(userId), organisationId);
+            String hash = Password.hash(password).withBcrypt().getResult();
+            user.setPassword(hash);
+            UserDAO.updateUser(user);
             result.put("success", true);
             result.put("message", "Password changed successfully");
         } catch (Exception e) {

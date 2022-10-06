@@ -111,7 +111,6 @@ public class User {
         this.isActive = isActive;
     }
 
-    @JSONPropertyIgnore
     public UserRole getUserRole() {
         return userRole;
     }

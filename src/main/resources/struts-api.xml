@@ -11,13 +11,16 @@
 
     <package name="api-user" namespace="/api/user" extends="default">
         <default-interceptor-ref name="authenticationStack" />
-        <action name="list" class="io.pathway.app.user.action.UserActionAPI" method="getUsers" />
+        <action name="list" class="io.pathway.app.user.action.UserActionAPI" method="listUser" />
         <action name="profile" class="io.pathway.app.user.action.UserActionAPI" method="getProfile" />
         <action name="change-password" class="io.pathway.app.user.action.UserAuthenticationAPI" method="processChangePassword" />
+        <action name="reset-password" class="io.pathway.app.user.action.UserAuthenticationAPI" method="processResetPassword" />
+        <action name="createOrUpdate" class="io.pathway.app.user.action.UserActionAPI" method="createOrUpdate" />
     </package>
 
     <package name="api-userrole" namespace="/api/userrole" extends="default">
         <default-interceptor-ref name="authenticationStack" />
+        <action name="list" class="io.pathway.app.userrole.action.UserRoleActionAPI" method="listUserRole" />
     </package>
 
     <package name="api-organisation" namespace="/api/organisation" extends="default">

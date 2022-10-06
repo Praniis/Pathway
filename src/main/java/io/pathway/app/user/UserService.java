@@ -1,5 +1,7 @@
 package io.pathway.app.user;
 
+import io.pathway.app.organisation.OrganisationDAO;
+import io.pathway.app.userrole.UserRoleDAO;
 import io.pathway.models.Organisation;
 import io.pathway.models.User;
 import io.pathway.models.UserRole;
@@ -7,13 +9,20 @@ import io.pathway.util.HibernateUtil;
 
 import com.password4j.Password;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.json.JSONObject;
 
+import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Objects;
+import java.net.URLDecoder;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserService {
 
@@ -130,18 +139,17 @@ public class UserService {
 
     public static List<User> listUsersInOrg(Long orgId) throws Exception {
         try {
-            List<User> users = UserDAO.getUserByOrganisationId(orgId);
-            return users;
+            return UserDAO.getUserByOrganisationId(orgId);
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Unable to list users");
         }
     }
 
-    public static JSONObject getProfile(Long userId) throws Exception {
+    public static JSONObject getProfile(Long userId, Long organisationId) throws Exception {
         try {
             JSONObject data = new JSONObject();
-            User user = UserDAO.getUserById(userId);
+            User user = UserDAO.getUserById(userId, organisationId);
             UserRole userrole = user.getUserRole();
             Organisation organisation = user.getOrganisation();
             data.put("user", new JSONObject(user));
@@ -151,6 +159,88 @@ public class UserService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Unable to list users");
+        }
+    }
+
+    public static User createUser(HttpServletRequest request, Long organisationId) throws Exception {
+        String name = request.getParameter("name");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        String mobile = request.getParameter("mobile");
+
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || StringUtils.isEmpty(request.getParameter("userRoleId"))) {
+            throw new Exception("Input all necessary fields");
+        }
+        Long userRoleId = Long.valueOf(request.getParameter("userRoleId"));
+        User existingUser = UserDAO.getUserByUserName(username);
+        if (Objects.nonNull(existingUser)) {
+            throw new Exception("Username already exists");
+        }
+
+        try {
+            String hash = Password.hash(password).withBcrypt().getResult();
+            Organisation organisation = OrganisationDAO.getOrganisationById(organisationId);
+            UserRole userrole = UserRoleDAO.getUserRoleById(userRoleId, organisationId);
+
+            User user = new User();
+            user.setName(name);
+            user.setUsername(username);
+            user.setPassword(hash);
+            user.setEmail(email);
+            user.setMobile(mobile);
+            user.setUserRole(userrole);
+            user.setOrganisation(organisation);
+            UserDAO.createUser(user);
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unable to create user");
+        }
+    }
+
+    public static User updateUser(HttpServletRequest request, Long organisationId) throws Exception {
+        String requestData = request.getReader().lines().collect(Collectors.joining());
+        HashMap<String, String> params = new HashMap<>();
+        Arrays.stream(requestData.split("&")).forEach(param -> {
+            String key = param.split("=")[0];
+            String value = null;
+            try {
+                value = URLDecoder.decode(param.split("=")[1]);
+            } catch (Exception e) {}
+            params.put(key, value);
+        });
+        String id = params.get("id");
+        String name = params.get("name");
+        String username = params.get("username");
+        String email = params.get("email");
+        String mobile = params.get("mobile");
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(id) || StringUtils.isEmpty(params.get("userRoleId"))) {
+            throw new Exception("Input all necessary fields");
+        }
+
+        Long userRoleId = Long.valueOf(params.get("userRoleId"));
+        User user = UserDAO.getUserById(Long.valueOf(id), organisationId);
+        if (Objects.isNull(user)) {
+            throw new Exception("User not found");
+        } else if (!user.getUsername().equalsIgnoreCase(username)) {
+            User existingUser = UserDAO.getUserByUserName(username);
+            if (Objects.nonNull(existingUser)) {
+                throw new Exception("Username already exists");
+            }
+        }
+
+        try {
+            UserRole userrole = UserRoleDAO.getUserRoleById(userRoleId, organisationId);
+            user.setName(name);
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setMobile(mobile);
+            user.setUserRole(userrole);
+            UserDAO.updateUser(user);
+            return user;
+        } catch (Exception e) {
+            throw new Exception("Unable to update user");
         }
     }
 }
