@@ -18,7 +18,7 @@
                                         <h4 class="text-center font-weight-light my-4 text-uppercase">Sign Up | PATHWAY</h4>
                                     </div>
                                     <div class="card-body">
-                                        <form class="auth-form sign-up" method="POST" action="/signup" enctype="multipart/form-data">
+                                        <form class="auth-form sign-up" method="POST" action="/api/auth/register">
                                             <div class="form-group">
                                                 <label class="bmd-label-floating" for="name">Name</label>
                                                 <input class="form-control" id="name" name="name" type="text" autofocus required>
@@ -31,7 +31,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="bmd-label-floating" for="mobile">Mobile</label>
-                                                <input class="form-control" id="mobile" name="mobile" type="text" required>
+                                                <input class="form-control" id="mobile" name="mobile" type="tel"  pattern="[7-9]{1}[0-9]{9}" required>
                                                 <div class="invalid-tooltip"></div>
                                             </div>
                                             <div class="form-group">

@@ -12,21 +12,10 @@ jQuery(function () {
         },
         submitHandler: function (form) {
             var isLogin = !/sign-up/gi.test($(form).attr('class'));
-            let obj = {};
-            let multiPart = new FormData(form);
-            if (!isLogin) {
-                obj = {
-                    cache: false,
-                    contentType: false,
-                    enctype: 'multipart/form-data',
-                    processData: false,
-                };
-            }
             $.ajax({
                 type: 'POST',
                 url: $(form).attr('action'),
-                data: isLogin ? $(form).serialize() : multiPart,
-                ...obj,
+                data: $(form).serialize(),
                 success: function (response) {
                     if (response.success) {
                         if (isLogin) {
@@ -42,8 +31,6 @@ jQuery(function () {
                         }
                     } else {
                         swal.fire("Fail!", response.error, "error");
-                        $('.auth-form input').val('');
-                        $('.auth-form select').val('').trigger('change');
                     }
                 },
                 error: function (response) {
@@ -74,7 +61,7 @@ jQuery(function () {
                 Swal.showLoading();
                 $.ajax({
                     type: 'POST',
-                    url: '/forgot-password',
+                    url: '/api/auth/recover-password',
                     data: { username: username.value },
                     success: function (response) {
                         Swal.hideLoading();

@@ -1,11 +1,11 @@
 package io.pathway.app.user;
 
-import com.password4j.Password;
-import com.sun.jdi.event.ExceptionEvent;
 import io.pathway.models.Organisation;
 import io.pathway.models.User;
 import io.pathway.models.UserRole;
 import io.pathway.util.HibernateUtil;
+
+import com.password4j.Password;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -34,6 +34,7 @@ public class UserService {
     }
 
     public static User register(HttpServletRequest request) throws Exception {
+        String name = request.getParameter("name");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
@@ -42,6 +43,7 @@ public class UserService {
         String orgAddress = request.getParameter("orgAddress");
         String orgEmail = request.getParameter("orgEmail");
         String orgWebsite = request.getParameter("orgWebsite");
+        Long orgType = Long.valueOf(request.getParameter("orgType"));
 
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || StringUtils.isEmpty(orgName)) {
             throw new Exception("Input all necessary fields");
@@ -63,6 +65,7 @@ public class UserService {
         userrole.setOrganisation(organisation);
 
         User user = new User();
+        user.setName(name);
         user.setUsername(username);
         user.setPassword(passwordHash);
         user.setEmail(email);
@@ -129,6 +132,22 @@ public class UserService {
         try {
             List<User> users = UserDAO.getUserByOrganisationId(orgId);
             return users;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unable to list users");
+        }
+    }
+
+    public static JSONObject getProfile(Long userId) throws Exception {
+        try {
+            JSONObject data = new JSONObject();
+            User user = UserDAO.getUserById(userId);
+            UserRole userrole = user.getUserRole();
+            Organisation organisation = user.getOrganisation();
+            data.put("user", new JSONObject(user));
+            data.put("userrole", new JSONObject(userrole));
+            data.put("organisation", new JSONObject(organisation));
+            return data;
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Unable to list users");

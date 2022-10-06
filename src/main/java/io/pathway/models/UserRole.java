@@ -25,9 +25,9 @@ public class UserRole {
     @Column(name = "permission", length = 1073741824)
     private String permission;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "OrganisationId")
+    @JoinColumn(name = "OrganisationId", nullable = false)
     private Organisation organisation;
 
     @OneToMany(mappedBy = "userRole")

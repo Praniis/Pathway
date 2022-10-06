@@ -4,18 +4,23 @@
 
 <struts>
     <package name="api-auth" namespace="/api/auth" extends="struts-default">
-
+        <action name="login" class="io.pathway.app.user.action.UserAuthenticationAPI" method="processLogin" />
+        <action name="register" class="io.pathway.app.user.action.UserAuthenticationAPI" method="processRegistration"/>
+        <action name="recover-password" class="io.pathway.app.user.action.UserAuthenticationAPI" method="processRecoverPassword" />
     </package>
 
     <package name="api-user" namespace="/api/user" extends="default">
-
+        <default-interceptor-ref name="authenticationStack" />
+        <action name="list" class="io.pathway.app.user.action.UserActionAPI" method="getUsers" />
+        <action name="profile" class="io.pathway.app.user.action.UserActionAPI" method="getProfile" />
+        <action name="change-password" class="io.pathway.app.user.action.UserAuthenticationAPI" method="processChangePassword" />
     </package>
 
     <package name="api-userrole" namespace="/api/userrole" extends="default">
-
+        <default-interceptor-ref name="authenticationStack" />
     </package>
 
     <package name="api-organisation" namespace="/api/organisation" extends="default">
-
+        <default-interceptor-ref name="authenticationStack" />
     </package>
 </struts>

@@ -4,22 +4,32 @@
 
 <struts>
 	<constant name="struts.devMode" value="true" />
+	<constant name="struts.enable.SlashesInActionNames" value="true" />
 
-	<package name="default" extends="struts-default">
+	<package name="default" namespace="" extends="struts-default">
 		<interceptors>
-			<interceptor name="authentication" class="io.pathway.interceptor.ValidaLogin" />
-			<interceptor-stack name="interceptor">
-				<interceptor-ref name="authentication" />
+			<interceptor class="io.pathway.app.user.interceptor.UserAuthentication" name="authenticationInterceptor" />
+			<interceptor-stack name="authenticationStack">
+				<interceptor-ref name="authenticationInterceptor" />
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
 		</interceptors>
 
-		<default-interceptor-ref name="interceptor" />
-
 		<global-results>
-			<result name="expired" type="redirectAction">index</result>
+			<result name="login-required" type="redirect">
+				<param name="location">/login</param>
+			</result>
 		</global-results>
 
+		<action name="">
+			<result type="redirect">
+				<param name="location">/login</param>
+			</result>
+		</action>
 
 	</package>
+
+	<include file="struts-jsp.xml" />
+	<include file="struts-api.xml" />
+
 </struts>

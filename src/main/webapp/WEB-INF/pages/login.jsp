@@ -18,7 +18,7 @@
                                         <h4 class="text-center font-weight-light my-4 text-uppercase">LOGIN | PATHWAY</h4>
                                     </div>
                                     <div class="card-body">
-                                        <form class="auth-form" action="/login" method="POST">
+                                        <form class="auth-form" action="/api/auth/login" method="POST">
                                             <div class="form-group">
                                                 <label class="bmd-label-floating" for="username">Username</label>
                                                 <input class="form-control" id="username" name="username" type="text" autocomplete="username" autofocus required>
@@ -36,8 +36,8 @@
                                         </form>
                                     </div>
                                     <div class="card-footer d-flex justify-content-between">
-                                        <a class="text-decoration-none" href="/complaint">Register Complaint</a>
-                                        <a class="text-decoration-none" href="/signup">New user? Sign up !</a>
+                                        <a class="text-decoration-none" href="#">Register Complaint</a>
+                                        <a class="text-decoration-none" href="/register">New user? Sign up !</a>
                                     </div>
                                 </div>
                             </div>
@@ -49,6 +49,6 @@
         <jsp:include page="common/foot.jsp" >
             <jsp:param name="hideDefaultTheme" value="true" />
         </jsp:include>
-        <script src="js/lib/login.js"></script>
+        <script src="/js/lib/login.js"></script>
     </body>
 </html>

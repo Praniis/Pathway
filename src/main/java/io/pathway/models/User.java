@@ -14,6 +14,9 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "name", length = 150)
+    private String name;
+
     @Column(name = "username", length = 150)
     private String username;
 
@@ -23,7 +26,7 @@ public class User {
     @Column(name = "email", length = 50)
     private String email;
 
-    @Column(name = "mobile", length = 20)
+    @Column(name = "mobile", length = 15)
     private String mobile;
 
     @Lob
@@ -33,14 +36,14 @@ public class User {
     @Column(name = "isActive", nullable = false)
     private Boolean isActive = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "UserRoleId")
+    @JoinColumn(name = "UserRoleId", nullable = false)
     private UserRole userRole;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "OrganisationId")
+    @JoinColumn(name = "OrganisationId", nullable = false)
     private Organisation organisation;
 
     public Long getId() {
@@ -49,6 +52,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUsername() {

@@ -1,3 +1,8 @@
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="io.pathway.models.User" %>
+
+<%! User loginUser = request.getAttribute(“loginUser”); %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -13,7 +18,7 @@
     <body class="sb-nav-fixed" style="font-size: .875rem;">
         <aside>
             <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark text-uppercase" style="font-family: 'Assistant', sans-serif;">
-                <a class="navbar-brand" href="/homepage">PATHWAY</a>
+                <a class="navbar-brand" href="/">PATHWAY</a>
                 <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle">
                     <i class="fas fa-bars" aria-hidden="true"></i>
                 </button>
@@ -24,7 +29,7 @@
                             <i class="fas fa-user fa-fw" aria-hidden="true"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="/reset-password">Change Password</a>
+                            <!-- <a class="dropdown-item" href="/reset-password">Change Password</a> -->
                             <a class="dropdown-item" href="/logout">Logout</a>
                         </div>
                     </li>
@@ -39,7 +44,7 @@
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as: </div>
-                        -
+                        <c:out value="${loginUser.getName()}" />
                     </div>
                 </nav>
             </div>
@@ -53,24 +58,21 @@
                             </div>
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
-                                    <div class="image">
-                                        <img class="rounded" src="https://www.searchpng.com/wp-content/uploads/2019/02/Profile-PNG-Icon-715x715.png" width="155" alt="Profile Image">
-                                    </div>
                                     <div class="ml-3 w-100">
                                         <h4 class="mb-0 mt-0"></h4>
                                         <span></span>
                                         <div class="p-2 mt-2 d-flex justify-content-between rounded stats">
                                             <div class="d-flex flex-column">
                                                 <span class="font-weight-bold">Name</span>
-                                                <span>-</span>
+                                                <span><c:out value="${loginUser.getName()}" /></span>
                                             </div>
                                             <div class="d-flex flex-column">
                                                 <span class="font-weight-bold">Email</span>
-                                                <span>-</span>
+                                                <span><c:out value="${loginUser.getEmail()}" /></span>
                                             </div>
                                             <div class="d-flex flex-column">
                                                 <span class="font-weight-bold">Mobile</span>
-                                                <span>-</span>
+                                                <span><c:out value="${loginUser.getMobile()}" /></span>
                                             </div>
                                         </div>
                                     </div>
