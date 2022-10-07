@@ -190,6 +190,7 @@ public class UserService {
             user.setEmail(email);
             user.setMobile(mobile);
             user.setUserRole(userrole);
+            user.setIsActive(true);
             user.setOrganisation(organisation);
             UserDAO.createUser(user);
             return user;

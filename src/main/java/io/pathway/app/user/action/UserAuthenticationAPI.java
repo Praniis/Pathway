@@ -73,9 +73,10 @@ public class UserAuthenticationAPI {
                 if (StringUtils.isEmpty(email)) {
                     throw new Exception("Invalid email!. Contact Admin");
                 }
+                // TODO: Send recovery link to email.
             }
             result.put("success", true);
-            result.put("message", "Password reset link send to your email");
+            result.put("message", "Password reset link send to your email (Under Construction)");
         } catch (Exception e) {
             result.put("success", false);
             String errMsg = e.getMessage();

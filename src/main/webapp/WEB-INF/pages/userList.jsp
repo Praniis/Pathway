@@ -5,7 +5,7 @@
 
 <head>
     <jsp:include page="common/head.jsp">
-        <jsp:param name="title" value="Home" />
+        <jsp:param name="title" value="Users" />
     </jsp:include>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Assistant&amp;display=swap" rel="stylesheet">
@@ -60,7 +60,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="bmd-label-floating" for="Mobile">Mobile</label>
-                                                    <input class="form-control" type="tel" id="mobile" name="mobile" placeholder="Mobile" autofocus required>
+                                                    <input class="form-control" type="tel" id="mobile" name="mobile" placeholder="Mobile" pattern="[7-9]{1}[0-9]{9}" autofocus required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="bmd-label-floating" for="role">User Role</label>
