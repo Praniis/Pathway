@@ -31,15 +31,14 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="modal fade" id="addNewUserModal" aria-hidden="true" aria-labelledby="myModalLabel"
-                            data-backdrop="static" role="dialog" tabindex="-1" data-keyboard="false">
+                        <div class="modal fade" id="addNewUserModal" aria-hidden="true" aria-labelledby="myModalLabel" data-backdrop="static" role="dialog" data-keyboard="false">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <form class="form-horizontal cmxform" id="addNewUserForm" role="form" method="POST"
                                         action="/api/user/createOrUpdate">
                                         <div class="modal-header">
                                             <h5 class="modal-title">New User</h5>
-                                            <button class="close" aria-hidden="true" data-dismiss="modal" type="button">x</button>
+                                            <button class="close" aria-hidden="true" data-dismiss="modal" type="button">&times;</button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="container-fluid">

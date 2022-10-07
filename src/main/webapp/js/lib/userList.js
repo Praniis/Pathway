@@ -1,19 +1,28 @@
 jQuery(function () {
     $('select2').select2();
-    $('#addNewUserModal #userrole').select2({
-      ajax: {
+    var userRoleList = [];
+    $.ajax({
         url: '/api/userrole/list',
-        dataType: 'json',
-        dropdownParent: $('#addNewUserModal'),
-        processResults: function (data) {
-              console.log(data);
-              return {
-                results: data.results.map(e => {
-                    return { id: e.id, text: e.name }
-                })
-              };
+        success: function(response) {
+            if (response.success) {
+                $.each(response.results, function(index, item) {
+                    userRoleList.push({
+                        id: item.id,
+                        text: item.name
+                    });
+                });
+                $('#addNewUserModal #userrole').select2({
+                    placeholder: 'Select UserRole',
+                    data: userRoleList
+                });
+        	} else {
+        	    swal.fire("Fail!", response.error, "error");
+            }
+        },
+        error: function (response) {
+            swal.fire("Fail!", response.error || '', "error").then(() => {
+        	});
         }
-      }
     });
 
     let userTable = $('#userTable').DataTable({
@@ -82,7 +91,7 @@ jQuery(function () {
 		$('#addNewUserModal input:not(.btn), #addNewUserModal textarea').val('');
 		$('#addNewUserModal .password').show();
 		$('#addNewUserModal #userrole').val('');
-		$('#addNewUserModal #userrole').trigger('change.select2');
+		$('#addNewUserModal #userrole').trigger('change');
 		$('#addNewUserModal #id').val('new');
 	});
 
@@ -95,7 +104,7 @@ jQuery(function () {
 		$('#addNewUserModal #email').val(response.email);
 		$('#addNewUserModal #mobile').val(response.mobile);
 		$('#addNewUserModal #userrole').val(response.userRole.id);
-		$('#addNewUserModal #userrole').trigger('change.select2');
+		$('#addNewUserModal #userrole').trigger('change');
 		$('#addNewUserModal').modal('show');
 	});
 
